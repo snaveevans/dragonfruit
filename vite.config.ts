@@ -8,6 +8,6 @@ export default defineConfig({
   test: {
     include: ["**/*.test.tsx"],
     globals: true,
-    environment: 'jsdom',
+    environment: 'happy-dom',
   },
 });
