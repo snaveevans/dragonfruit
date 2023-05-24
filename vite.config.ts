@@ -8,6 +8,10 @@ export default defineConfig({
   test: {
     include: ["**/*.test.tsx"],
     globals: true,
-    environment: 'happy-dom',
+    environment: "happy-dom",
+    coverage: {
+      provider: "istanbul",
+    },
+    setupFiles: ['setup.test.ts']
   },
 });

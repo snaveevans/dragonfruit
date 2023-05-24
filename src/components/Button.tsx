@@ -1,9 +1,9 @@
-import React, { ButtonHTMLAttributes } from "react";
+import { ButtonHTMLAttributes, forwardRef } from "react";
 import clsx from "clsx";
 
 type ReactButton = ButtonHTMLAttributes<HTMLButtonElement>;
 
-type Props = {
+export type Props = {
   type?: ReactButton["type"];
   children: ReactButton["children"];
   className?: ReactButton["className"];
@@ -11,7 +11,7 @@ type Props = {
   "data-testid"?: string;
 };
 
-const Button = React.forwardRef<HTMLButtonElement, Props>((props, ref) => (
+const Button = forwardRef<HTMLButtonElement, Props>((props, ref) => (
   <button
     ref={ref}
     className={clsx(
