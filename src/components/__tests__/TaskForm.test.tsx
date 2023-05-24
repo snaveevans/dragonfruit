@@ -9,17 +9,17 @@ describe("TaskForm component", () => {
     return [mockedEvent];
   };
 
-  test("should render", () => {
+  test("should render label", () => {
     renderForm();
-    const nameLabel = screen.getByTestId("taskform:name-label");
+    const nameLabel = screen.getByText("Name");
     expect(nameLabel).toHaveTextContent("Name");
   });
 
   test("should return input on submit", async () => {
     const [mockedEvent] = renderForm();
     const testInput = "change oil";
-    const nameInput = screen.getByTestId("taskform:name-input");
-    const submitButton = screen.getByTestId("taskform:submit");
+    const nameInput = screen.getByRole("textbox");
+    const submitButton = screen.getByRole("button");
 
     await userEvent.type(nameInput, testInput);
     await userEvent.click(submitButton);
@@ -30,7 +30,7 @@ describe("TaskForm component", () => {
 
   test("should not pass validation", async () => {
     const [mockedEvent] = renderForm();
-    const submitButton = screen.getByTestId("taskform:submit");
+    const submitButton = screen.getByRole("button");
 
     await userEvent.click(submitButton);
     expect(mockedEvent).not.toBeCalled();
