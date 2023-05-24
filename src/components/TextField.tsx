@@ -1,6 +1,7 @@
 import { forwardRef } from "react";
 import Input, { Props as InputProps } from "./Input";
 import Label, { Props as LabelProps } from "./Label";
+import clsx from "clsx";
 
 export interface Props {
   id: Required<InputProps["id"]>;
@@ -14,7 +15,10 @@ export interface Props {
 }
 
 const TextField = forwardRef<HTMLInputElement, Props>((props, ref) => (
-  <span className={props.className} data-testid={props["data-testid"]}>
+  <span
+    className={clsx("grow", props.className)}
+    data-testid={props["data-testid"]}
+  >
     <Label id={props.id} {...props.labelProps}>
       {props.label}
     </Label>

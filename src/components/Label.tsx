@@ -16,7 +16,7 @@ const Label = forwardRef<HTMLLabelElement, Props>((props, ref) => (
     id={props.id}
     htmlFor={props.id}
     ref={ref}
-    className={clsx("flex", "items-center", props.className)}
+    className={clsx("flex", "items-center", "text-xl", props.className)}
     data-testid={props["data-testid"]}
   >
     {props.children}

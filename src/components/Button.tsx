@@ -9,6 +9,7 @@ export type Props = {
   className?: ReactButton["className"];
   onClick?: ReactButton["onClick"];
   "data-testid"?: string;
+  fullWidth?: boolean;
 };
 
 const Button = forwardRef<HTMLButtonElement, Props>((props, ref) => (
@@ -22,7 +23,10 @@ const Button = forwardRef<HTMLButtonElement, Props>((props, ref) => (
       "font-bold",
       "py-1",
       "px-2",
-      "rounded"
+      "rounded",
+      "h-10",
+      typeof props.fullWidth === "undefined" && "w-full md:w-auto",
+      props.fullWidth && "w-full"
     )}
     type={props.type}
     onClick={props.onClick}

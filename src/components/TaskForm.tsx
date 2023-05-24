@@ -1,6 +1,5 @@
 import { FormEvent, useMemo } from "react";
 import { useState } from "react";
-import Input from "./Input";
 import Button from "./Button";
 import TextField from "./TextField";
 
@@ -34,19 +33,24 @@ function TaskForm(props: Props) {
       data-testid="content"
       className="my-2 grid gap-2"
     >
-      <span className="flex gap-2">
+      <span className="flex flex-col md:flex-row gap-2 items-end">
         <TextField
-          className="flex gap-2 grow"
+          className="flex flex-col gap-2"
           inputProps={{ className: "grow" }}
           id="task-name"
           value={name}
           label="Name"
           onChange={(e) => setName(e.target.value)}
         />
-        <Button data-testid="taskform:submit" type="submit">
-          Create
-        </Button>
       </span>
+      <Button
+        className="ml-auto"
+        data-testid="taskform:submit"
+        type="submit"
+        fullWidth={false}
+      >
+        Create
+      </Button>
     </form>
   );
 }

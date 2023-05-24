@@ -10,8 +10,8 @@ export interface Props {
   className?: ReactInput["className"];
   onChange: ReactInput["onChange"];
   "data-testid"?: string;
-  error?: boolean
-};
+  error?: boolean;
+}
 
 const Input = forwardRef<HTMLInputElement, Props>((props, ref) => (
   <input
@@ -23,7 +23,9 @@ const Input = forwardRef<HTMLInputElement, Props>((props, ref) => (
       "border",
       "border-purple-700",
       "hover:border-purple-900",
-      "rounded"
+      "rounded",
+      "p-1.5",
+      "h-10"
     )}
     type={props.type}
     onChange={props.onChange}
