@@ -2,13 +2,13 @@ import { FormEvent, useMemo } from "react";
 import { useState } from "react";
 import Button from "./Button";
 import TextField from "./TextField";
+import { Task } from "../models/Tasks";
+import { v4 as uuid } from "uuid";
 
-interface TaskEditModel {
-  name: string;
-}
 interface Props {
-  onSubmit: (model: TaskEditModel) => void;
+  onSubmit: (model: Task) => void;
 }
+
 function TaskForm(props: Props) {
   const [name, setName] = useState("");
   const isValid = useMemo(() => {
@@ -24,7 +24,8 @@ function TaskForm(props: Props) {
     if (!isValid) {
       return;
     }
-    props.onSubmit({ name });
+    props.onSubmit({ name, id: uuid() });
+    setName("");
   };
 
   return (
