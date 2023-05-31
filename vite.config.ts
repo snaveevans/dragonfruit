@@ -7,6 +7,7 @@ export default defineConfig({
   plugins: [react(), VitePWA({ registerType: "autoUpdate" })],
   test: {
     include: ["**/*.test.tsx", "**/*.test.ts"],
+    exclude: ['setup.test.ts'],
     globals: true,
     environment: "happy-dom",
     coverage: {
