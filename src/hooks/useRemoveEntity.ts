@@ -5,19 +5,19 @@ import {
   DragonFruitStoreValues,
 } from "../models/DragonFruitDB";
 
-export default function useUpsertEntity<TEntity extends DragonFruitStoreValues>(
+export default function useRemoveEntity<TEntity extends DragonFruitStoreValues>(
   storeName: DragonFruitStoreNames,
   keyGetter: (entity: TEntity) => string
 ) {
   const storeNameRef = useRef(storeName);
   const dbPromise = useDB();
-  const upsert = useCallback(
+  const remove = useCallback(
     async (entity: TEntity) => {
       const db = await dbPromise;
-      await db.put(storeNameRef.current, entity, keyGetter(entity));
+      await db.delete(storeNameRef.current, keyGetter(entity));
     },
     [dbPromise]
   );
 
-  return upsert;
+  return remove;
 }

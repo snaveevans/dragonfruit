@@ -5,13 +5,19 @@ import TaskListItem from "./components/TaskListItem";
 import useUpsertEntity from "./hooks/useUpsertEntity";
 import { Task } from "./models/Tasks";
 import { useGetEntities } from "./hooks/useGetEntities";
+import useRemoveEntity from "./hooks/useRemoveEntity";
 
 function App() {
   const keyGetter = useCallback((entity: Task): string => entity.id, []);
   const upsertTask = useUpsertEntity<Task>("tasks", keyGetter);
+  const removeTask = useRemoveEntity<Task>("tasks", keyGetter);
   const { entities, refetch } = useGetEntities("tasks");
   const createTask = async (entity: Task) => {
     await upsertTask(entity);
+    refetch();
+  };
+  const deleteTask = async (entity: Task) => {
+    await removeTask(entity);
     refetch();
   };
 
@@ -22,7 +28,10 @@ function App() {
         <List
           items={entities}
           keyGetter={(t) => t.id}
-          renderer={(t) => <TaskListItem task={t} />}
+          renderer={(t) => (
+            <TaskListItem task={t} onDelete={() => deleteTask(t)} />
+          )}
+          className="space-y-3"
         />
         <TaskForm onSubmit={createTask} />
       </section>

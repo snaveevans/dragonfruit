@@ -6,6 +6,7 @@ type ReactInput = InputHTMLAttributes<HTMLInputElement>;
 export interface Props {
   id: ReactInput["id"];
   value: ReactInput["value"];
+  placeholder?: ReactInput["placeholder"];
   type?: ReactInput["type"];
   className?: ReactInput["className"];
   onChange: ReactInput["onChange"];
@@ -18,6 +19,7 @@ const Input = forwardRef<HTMLInputElement, Props>((props, ref) => (
     id={props.id}
     ref={ref}
     value={props.value}
+    placeholder={props.placeholder}
     className={clsx(
       props.className,
       "border",

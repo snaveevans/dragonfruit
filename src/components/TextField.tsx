@@ -6,6 +6,7 @@ import clsx from "clsx";
 export interface Props {
   id: Required<InputProps["id"]>;
   value: InputProps["value"];
+  placeholder?: InputProps["placeholder"];
   onChange: InputProps["onChange"];
   label: LabelProps["children"];
   className?: string;
@@ -28,6 +29,7 @@ const TextField = forwardRef<HTMLInputElement, Props>((props, ref) => (
       type="text"
       value={props.value}
       onChange={props.onChange}
+      placeholder={props.placeholder}
       {...props.inputProps}
     />
   </span>

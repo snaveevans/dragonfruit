@@ -10,6 +10,7 @@ export type Props = {
   onClick?: ReactButton["onClick"];
   "data-testid"?: string;
   fullWidth?: boolean;
+  icon?: boolean;
 };
 
 const Button = forwardRef<HTMLButtonElement, Props>((props, ref) => (
@@ -17,15 +18,18 @@ const Button = forwardRef<HTMLButtonElement, Props>((props, ref) => (
     ref={ref}
     className={clsx(
       props.className,
-      "bg-purple-700",
-      "hover:bg-purple-900",
-      "text-white",
-      "font-bold",
-      "py-1",
-      "px-2",
-      "rounded",
-      "h-10",
-      typeof props.fullWidth === "undefined" && "w-full md:w-auto",
+      props.icon
+        ? []
+        : [
+            "bg-purple-700",
+            "hover:bg-purple-900",
+            "text-white",
+            "font-bold",
+            "py-1",
+            "px-2",
+            "rounded",
+            "h-10",
+          ],
       props.fullWidth && "w-full"
     )}
     type={props.type}

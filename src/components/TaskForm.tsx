@@ -39,7 +39,8 @@ function TaskForm(props: Props) {
         inputProps={{ className: "grow" }}
         id="task-name"
         value={name}
-        label="Name"
+        placeholder="Eg Change furnace filter every month"
+        label="What is your task?"
         onChange={(e) => setName(e.target.value)}
       />
       <Button
