@@ -157,7 +157,6 @@ const pivots: {
     }
     const [interval, variance] = result;
     return {
-      id: "test",
       interval,
       variance,
       regularity: modifier,

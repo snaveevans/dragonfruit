@@ -1,5 +1,4 @@
 export default interface Schedule {
-  id: string
   interval: Interval
   variance: number[]
   regularity: number
