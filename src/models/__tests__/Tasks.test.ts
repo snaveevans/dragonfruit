@@ -127,15 +127,15 @@ describe("tokenizeInput", () => {
     });
   });
 
-  test.skip("every month", () => {
-    const input = "eat out every 3rd saturday";
+  test("every month", () => {
+    const input = "run 5 miles every month";
     const result = tokenizeInput(input);
     expect(result).toMatchObject({
-      name: "eat out",
+      name: "run 5 miles",
       schedule: {
-        interval: Interval.weekly,
-        variance: [6],
-        regularity: 3,
+        interval: Interval.monthly,
+        variance: [0],
+        regularity: 1,
       },
     });
   });
@@ -190,9 +190,3 @@ describe("tokenizeInput", () => {
   // interval: yearly
   // variance: [0, 73, 146, 219, 292]
   // regularity: 1
-
-// watch conference twice a year
-// bi-annually (2 times a year)
-  // interval: yearly | monthly
-  // variance: [1, 182] | [1]
-  // regularity: 1 | 6

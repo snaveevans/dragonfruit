@@ -42,6 +42,7 @@ const intervalIdentifiers = {
     "october",
     "novemeber",
     "december",
+    "month",
   ],
   [Interval.yearly]: ["year"],
 };
