@@ -34,16 +34,14 @@ function TaskForm(props: Props) {
       data-testid="content"
       className="my-2 grid gap-2"
     >
-      <span className="flex flex-col md:flex-row gap-2 items-end">
-        <TextField
-          className="flex flex-col gap-2"
-          inputProps={{ className: "grow" }}
-          id="task-name"
-          value={name}
-          label="Name"
-          onChange={(e) => setName(e.target.value)}
-        />
-      </span>
+      <TextField
+        className="flex flex-col md:flex-row gap-2 w-full"
+        inputProps={{ className: "grow" }}
+        id="task-name"
+        value={name}
+        label="Name"
+        onChange={(e) => setName(e.target.value)}
+      />
       <Button
         className="ml-auto"
         data-testid="taskform:submit"
