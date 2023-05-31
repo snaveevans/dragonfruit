@@ -9,6 +9,7 @@ describe("tokenizeInput", () => {
       name: input,
     });
   });
+
   test("every day", () => {
     const input = "brush teeth every day";
     const result = tokenizeInput(input);
@@ -18,6 +19,19 @@ describe("tokenizeInput", () => {
         interval: Interval.daily,
         variance: [1],
         regularity: 1,
+      },
+    });
+  });
+
+  test("every other day", () => {
+    const input = "floss teeth every other day";
+    const result = tokenizeInput(input);
+    expect(result).toMatchObject({
+      name: "floss teeth",
+      schedule: {
+        interval: Interval.daily,
+        variance: [1],
+        regularity: 2,
       },
     });
   });

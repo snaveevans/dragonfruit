@@ -6,8 +6,6 @@ export interface Task {
   lastCompletionDate?: Date;
 }
 
-const modifiers = ["other"];
-
 const intervalIdentifiers = {
   [Interval.daily]: ["day"],
   [Interval.weekly]: [
@@ -56,11 +54,12 @@ const pivots: {
       return;
     }
     const [interval, variance] = result;
+    const hasOtherModifier = input.includes("other");
     return {
       id: "test",
       interval,
       variance,
-      regularity: 1,
+      regularity: hasOtherModifier ? 2 : 1,
     };
   },
   twice: () => {},
