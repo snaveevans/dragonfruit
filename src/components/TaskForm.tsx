@@ -2,8 +2,9 @@ import { FormEvent, useMemo } from "react";
 import { useState } from "react";
 import Button from "./Button";
 import TextField from "./TextField";
-import { Task } from "../models/Tasks";
+import { Task, tokenizeInput } from "../models/Tasks";
 import { v4 as uuid } from "uuid";
+import useDebounce from "../hooks/useDebounce";
 
 interface Props {
   onSubmit: (model: Task) => void;
@@ -19,6 +20,18 @@ function TaskForm(props: Props) {
 
     return true;
   }, [name]);
+  const debouncedName = useDebounce(name);
+  const scheduleText = useMemo(() => {
+    if (!debouncedName?.trim().length) {
+      return "";
+    }
+
+    const result = tokenizeInput(debouncedName);
+    if (!result.schedule) {
+      return "";
+    }
+    return `${result.schedule.interval} on ${result.schedule.variance}`;
+  }, [debouncedName]);
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
@@ -31,7 +44,7 @@ function TaskForm(props: Props) {
     setName("");
   };
   const showError = submitted && !isValid;
-  const helperText = showError ? "Task information required" : "";
+  const helperText = showError ? "Task information required" : scheduleText;
 
   return (
     <form
