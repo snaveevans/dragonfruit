@@ -17,7 +17,7 @@ describe("tokenizeInput", () => {
       name: "brush teeth",
       schedule: {
         interval: Interval.daily,
-        variance: [1],
+        variance: [0],
         regularity: 1,
       },
     });
@@ -30,7 +30,7 @@ describe("tokenizeInput", () => {
       name: "floss teeth",
       schedule: {
         interval: Interval.daily,
-        variance: [1],
+        variance: [0],
         regularity: 2,
       },
     });
@@ -43,36 +43,51 @@ describe("tokenizeInput", () => {
       name: "pray",
       schedule: {
         interval: Interval.daily,
-        variance: [2],
+        variance: [0, 12],
+        regularity: 1,
+      },
+    });
+  });
+
+  test("twice a day starting at", () => {
+    const input = "pray twice a day starting at 8";
+    const result = tokenizeInput(input);
+    expect(result).toMatchObject({
+      name: "pray",
+      schedule: {
+        interval: Interval.daily,
+        variance: [8, 20],
+        regularity: 1,
+      },
+    });
+  });
+
+  test("twice a day starting at high", () => {
+    const input = "pray twice a day starting at 18";
+    const result = tokenizeInput(input);
+    expect(result).toMatchObject({
+      name: "pray",
+      schedule: {
+        interval: Interval.daily,
+        variance: [6, 18],
+        regularity: 1,
+      },
+    });
+  });
+
+  test("every monday", () => {
+    const input = "take out trash every monday";
+    const result = tokenizeInput(input);
+    expect(result).toMatchObject({
+      name: "take out trash",
+      schedule: {
+        interval: Interval.weekly,
+        variance: [1],
         regularity: 1,
       },
     });
   });
 });
-
-// brush teeth every day
-// every day
-  // interval: daily
-  // variance: [1]
-  // regularity: 1
-
-// floss teeth every other day
-// every other day
-  // interval: daily
-  // variance: [1]
-  // regularity: 2
-
-// pray twice a day 
-// bi-daily (2 times a day)
-  // interval: daily
-  // variance: [2]
-  // regularity: 1
-
-// take out trash every monday
-// every monday
-  // interval: weekly
-  // variance: [2]
-  // regularity: 1
 
 // watch conference twice a year
 // bi-annually (2 times a year)

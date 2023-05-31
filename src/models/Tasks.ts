@@ -34,15 +34,79 @@ const intervalIdentifiers = {
   [Interval.yearly]: ["year"],
 };
 
+const DAILY_MAX = 23;
+const WEEKLY_MAX = 6;
+
+function ensureVarianceRange(variance: number, max: number) {
+  if (variance > max) {
+    return variance - max - 1;
+  }
+
+  return variance;
+}
+
+function foobar(words: string[], intervalOccurences: number, max: number) {
+  const delta = Math.floor((max + 1) / intervalOccurences);
+  const startingValueRaw = words
+    .map((word) => word.replace(/\D/g, ""))
+    .map(Number)
+    .find((n) => n > 0);
+  const startingValue = Math.min(max, Math.max(0, startingValueRaw || 0));
+  const result = new Array(intervalOccurences)
+    .fill(0)
+    .map((_, index) => ensureVarianceRange(index * delta + startingValue, max))
+    .sort((a, b) => a - b);
+  return result;
+}
+
+function mapWordToNumber(word: string, interval: Interval): string {
+  const mapped: { [key: string]: number } = intervalIdentifiers[
+    interval
+  ].reduce((acc, cur, index) => ({ ...acc, [cur]: index }), {});
+  return mapped[word]?.toString() || word;
+}
+
+function getVariance(
+  interval: Interval,
+  words: string[],
+  intervalOccurences: number
+): number[] {
+  switch (interval) {
+    case Interval.daily:
+      return foobar(words, intervalOccurences, DAILY_MAX);
+    case Interval.weekly:
+      const mappedWords = words.map((word) =>
+        mapWordToNumber(word, Interval.weekly)
+      );
+      return foobar(mappedWords, intervalOccurences, WEEKLY_MAX);
+    default:
+      return [];
+  }
+}
+
 function getIntervalIds(
   strippedInput: string,
-  varianceModifier?: number
+  intervalOccurences = 1
 ): [Interval, number[]] | undefined {
+  const words = strippedInput.split(" ");
   const foundDailyIds = intervalIdentifiers[Interval.daily].filter((dailyId) =>
-    strippedInput.includes(dailyId)
+    words.find((word) => word === dailyId)
   );
   if (foundDailyIds.length) {
-    return [Interval.daily, [1 * (varianceModifier || 1)]];
+    return [
+      Interval.daily,
+      getVariance(Interval.daily, words, intervalOccurences),
+    ];
+  }
+
+  const foundWeeklyIds = intervalIdentifiers[Interval.weekly].filter(
+    (dailyId) => strippedInput.includes(dailyId)
+  );
+  if (foundWeeklyIds.length) {
+    return [
+      Interval.weekly,
+      getVariance(Interval.weekly, words, intervalOccurences),
+    ];
   }
 }
 
@@ -76,7 +140,7 @@ const pivots: {
       regularity: 1,
     };
   },
-  "at the": () => {},
+  at: () => {},
 };
 
 export interface TokenizedResult {
