@@ -6,6 +6,14 @@ export interface Task {
   lastCompletionDate?: Date;
 }
 
+const modifiers = {
+  other: 2,
+  "2nd": 2,
+  "3rd": 3,
+  "4th": 4,
+  "5th": 5,
+};
+
 const intervalIdentifiers = {
   [Interval.daily]: ["day"],
   [Interval.weekly]: [
@@ -45,16 +53,21 @@ function ensureVarianceRange(variance: number, max: number) {
   return variance;
 }
 
+function pullNumbers(words: string[]): number[] {
+  const result = words
+    .map((word) => word.replace(/\D/g, ""))
+    .map(Number)
+    .filter((n) => n > 0);
+  return result;
+}
+
 function buildVariances(
   words: string[],
   intervalOccurences: number,
   max: number
 ) {
   const delta = Math.floor((max + 1) / intervalOccurences);
-  const foundVariances = words
-    .map((word) => word.replace(/\D/g, ""))
-    .map(Number)
-    .filter((n) => n > 0);
+  const foundVariances = pullNumbers(words);
 
   if (foundVariances.length > 1) {
     return foundVariances.sort((a, b) => a - b);
@@ -69,11 +82,18 @@ function buildVariances(
   return result;
 }
 
-function mapWordToNumber(word: string, interval: Interval): string {
+function mapWordToNumber(
+  word: string,
+  mapped: { [key: string]: string | number }
+): string {
+  return mapped[word]?.toString() || word;
+}
+
+function mapIntervalWordToNumber(word: string, interval: Interval): string {
   const mapped: { [key: string]: number } = intervalIdentifiers[
     interval
   ].reduce((acc, cur, index) => ({ ...acc, [cur]: index }), {});
-  return mapped[word]?.toString() || word;
+  return mapWordToNumber(word, mapped);
 }
 
 function getVariance(
@@ -86,7 +106,7 @@ function getVariance(
       return buildVariances(words, intervalOccurences, DAILY_MAX);
     case Interval.weekly:
       const mappedWords = words.map((word) =>
-        mapWordToNumber(word, Interval.weekly)
+        mapIntervalWordToNumber(word, Interval.weekly)
       );
       return buildVariances(mappedWords, intervalOccurences, WEEKLY_MAX);
     default:
@@ -95,10 +115,9 @@ function getVariance(
 }
 
 function getIntervalIds(
-  strippedInput: string,
+  words: string[],
   intervalOccurences = 1
 ): [Interval, number[]] | undefined {
-  const words = strippedInput.split(" ");
   const foundDailyIds = intervalIdentifiers[Interval.daily].filter((dailyId) =>
     words.find((word) => word === dailyId)
   );
@@ -110,7 +129,7 @@ function getIntervalIds(
   }
 
   const foundWeeklyIds = intervalIdentifiers[Interval.weekly].filter(
-    (dailyId) => strippedInput.includes(dailyId)
+    (dailyId) => words.find((word) => word === dailyId)
   );
   if (foundWeeklyIds.length) {
     return [
@@ -123,22 +142,27 @@ function getIntervalIds(
 const pivots: {
   [key: string]: (strippedInput: string) => Schedule | undefined | void;
 } = {
-  every: (input: string) => {
-    const result = getIntervalIds(input);
+  every: (strippedInput: string) => {
+    const words = strippedInput.split(" ");
+    const modifier =
+      pullNumbers(words.map((w) => mapWordToNumber(w, modifiers))).at(0) ?? 1;
+    const allModifiers = Object.keys(modifiers);
+    const cleaned = words.filter(w => !allModifiers.includes(w))
+    const result = getIntervalIds(cleaned);
     if (!result) {
       return;
     }
     const [interval, variance] = result;
-    const hasOtherModifier = input.includes("other");
     return {
       id: "test",
       interval,
       variance,
-      regularity: hasOtherModifier ? 2 : 1,
+      regularity: modifier,
     };
   },
   twice: (strippedInput: string) => {
-    const result = getIntervalIds(strippedInput, 2);
+    const words = strippedInput.split(" ");
+    const result = getIntervalIds(words, 2);
     if (!result) {
       return;
     }

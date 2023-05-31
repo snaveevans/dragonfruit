@@ -100,6 +100,32 @@ describe("tokenizeInput", () => {
       },
     });
   });
+
+  test("every other week", () => {
+    const input = "eat pizza every other friday";
+    const result = tokenizeInput(input);
+    expect(result).toMatchObject({
+      name: "eat pizza",
+      schedule: {
+        interval: Interval.weekly,
+        variance: [5],
+        regularity: 2,
+      },
+    });
+  });
+
+  test("every 3rd week", () => {
+    const input = "eat out every 3rd saturday";
+    const result = tokenizeInput(input);
+    expect(result).toMatchObject({
+      name: "eat out",
+      schedule: {
+        interval: Interval.weekly,
+        variance: [6],
+        regularity: 3,
+      },
+    });
+  });
 });
 
 // refinish the deck every other year
@@ -113,12 +139,6 @@ describe("tokenizeInput", () => {
   // interval: monthly
   // variance: [1]
   // regularity: 3
-
-// eat pizza every other friday
-// every other friday
-  // interval: weekly
-  // variance: [6]
-  // regularity: 2
 
 // change furnace filter at the first of every month
 // first of every month
