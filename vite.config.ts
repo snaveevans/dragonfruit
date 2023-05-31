@@ -6,12 +6,12 @@ import { VitePWA } from "vite-plugin-pwa";
 export default defineConfig({
   plugins: [react(), VitePWA({ registerType: "autoUpdate" })],
   test: {
-    include: ["**/*.test.tsx"],
+    include: ["**/*.test.tsx", "**/*.test.ts"],
     globals: true,
     environment: "happy-dom",
     coverage: {
       provider: "istanbul",
     },
-    setupFiles: ['setup.test.ts']
+    setupFiles: ["setup.test.ts"],
   },
 });

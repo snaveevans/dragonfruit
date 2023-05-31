@@ -11,8 +11,8 @@ describe("TaskForm component", () => {
 
   test("should render label", () => {
     renderForm();
-    const nameLabel = screen.getByText("Name");
-    expect(nameLabel).toHaveTextContent("Name");
+    const nameLabel = screen.getByText("Task information");
+    expect(nameLabel).toHaveTextContent("Task information");
   });
 
   test("should return input on submit", async () => {
@@ -38,7 +38,8 @@ describe("TaskForm component", () => {
 
   test("should have accessible name", () => {
     renderForm();
-    const nameLabel = screen.getByLabelText("Name");
-    expect(nameLabel).toHaveAccessibleName("Name");
+    const nameLabel = screen.getByLabelText("Task information");
+    expect(nameLabel).toHaveAccessibleName("Task information"
+    );
   });
 });

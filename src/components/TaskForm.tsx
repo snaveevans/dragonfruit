@@ -30,6 +30,8 @@ function TaskForm(props: Props) {
     setSubmitted(false);
     setName("");
   };
+  const showError = submitted && !isValid;
+  const helperText = showError ? "Task information required" : "";
 
   return (
     <form
@@ -43,10 +45,10 @@ function TaskForm(props: Props) {
         id="task-name"
         value={name}
         placeholder="Example: Change furnace filter every month"
-        label="What is your task?"
+        label="Task information"
         onChange={(e) => setName(e.target.value)}
-        helperText="What's in the box!?"
-        error={submitted && !isValid}
+        helperText={helperText}
+        error={showError}
       />
       <Button
         className="ml-auto"
