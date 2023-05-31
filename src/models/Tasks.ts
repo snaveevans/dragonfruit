@@ -45,12 +45,22 @@ function ensureVarianceRange(variance: number, max: number) {
   return variance;
 }
 
-function foobar(words: string[], intervalOccurences: number, max: number) {
+function buildVariances(
+  words: string[],
+  intervalOccurences: number,
+  max: number
+) {
   const delta = Math.floor((max + 1) / intervalOccurences);
-  const startingValueRaw = words
+  const foundVariances = words
     .map((word) => word.replace(/\D/g, ""))
     .map(Number)
-    .find((n) => n > 0);
+    .filter((n) => n > 0);
+
+  if (foundVariances.length > 1) {
+    return foundVariances.sort((a, b) => a - b);
+  }
+
+  const startingValueRaw = foundVariances.at(0);
   const startingValue = Math.min(max, Math.max(0, startingValueRaw || 0));
   const result = new Array(intervalOccurences)
     .fill(0)
@@ -73,12 +83,12 @@ function getVariance(
 ): number[] {
   switch (interval) {
     case Interval.daily:
-      return foobar(words, intervalOccurences, DAILY_MAX);
+      return buildVariances(words, intervalOccurences, DAILY_MAX);
     case Interval.weekly:
       const mappedWords = words.map((word) =>
         mapWordToNumber(word, Interval.weekly)
       );
-      return foobar(mappedWords, intervalOccurences, WEEKLY_MAX);
+      return buildVariances(mappedWords, intervalOccurences, WEEKLY_MAX);
     default:
       return [];
   }
@@ -141,6 +151,7 @@ const pivots: {
     };
   },
   at: () => {},
+  times: () => {},
 };
 
 export interface TokenizedResult {

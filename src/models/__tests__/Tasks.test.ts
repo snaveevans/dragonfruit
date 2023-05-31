@@ -87,13 +87,20 @@ describe("tokenizeInput", () => {
       },
     });
   });
-});
 
-// watch conference twice a year
-// bi-annually (2 times a year)
-  // interval: yearly | monthly
-  // variance: [1, 182] | [1]
-  // regularity: 1 | 6
+  test("every tuesday & friday", () => {
+    const input = "work out every tuesday & friday";
+    const result = tokenizeInput(input);
+    expect(result).toMatchObject({
+      name: "work out",
+      schedule: {
+        interval: Interval.weekly,
+        variance: [2, 5],
+        regularity: 1,
+      },
+    });
+  });
+});
 
 // refinish the deck every other year
 // every other year
@@ -124,3 +131,15 @@ describe("tokenizeInput", () => {
   // interval: monthly
   // variance: [21] // doesn't quite work
   // regularity: 1
+
+// clean out garage 5 times a year
+// 5 times a year
+  // interval: yearly
+  // variance: [0, 73, 146, 219, 292]
+  // regularity: 1
+
+// watch conference twice a year
+// bi-annually (2 times a year)
+  // interval: yearly | monthly
+  // variance: [1, 182] | [1]
+  // regularity: 1 | 6
