@@ -9,6 +9,8 @@ export interface Props {
   placeholder?: InputProps["placeholder"];
   onChange: InputProps["onChange"];
   label: LabelProps["children"];
+  error?: boolean;
+  helperText?: string;
   className?: string;
   "data-testid"?: string;
   inputProps?: Partial<InputProps>;
@@ -20,7 +22,15 @@ const TextField = forwardRef<HTMLInputElement, Props>((props, ref) => (
     className={clsx("grow", props.className)}
     data-testid={props["data-testid"]}
   >
-    <Label id={props.id} {...props.labelProps}>
+    <Label
+      id={props.id}
+      {...props.labelProps}
+      className={clsx(
+        "mb-1",
+        props.error && "text-rose-600",
+        props.labelProps?.className
+      )}
+    >
       {props.label}
     </Label>
     <Input
@@ -30,8 +40,18 @@ const TextField = forwardRef<HTMLInputElement, Props>((props, ref) => (
       value={props.value}
       onChange={props.onChange}
       placeholder={props.placeholder}
+      error={props.error}
       {...props.inputProps}
     />
+    <span
+      className={clsx(
+        "text-sm",
+        props.error ? "text-rose-600" : "text-gray-600",
+        "h-5"
+      )}
+    >
+      {props.helperText}
+    </span>
   </span>
 ));
 

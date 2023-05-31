@@ -23,8 +23,9 @@ const Input = forwardRef<HTMLInputElement, Props>((props, ref) => (
     className={clsx(
       props.className,
       "border",
-      "border-purple-700",
-      "hover:border-purple-900",
+      props.error
+        ? ["border-rose-600", "hover:border-rose-900"]
+        : ["border-purple-700", "hover:border-purple-900"],
       "rounded",
       "p-1.5",
       "h-10"
