@@ -126,13 +126,46 @@ describe("tokenizeInput", () => {
       },
     });
   });
-});
 
-// refinish the deck every other year
-// every other year
-  // interval: yearly
-  // variance: [1]
-  // regularity: 2
+  test.skip("every month", () => {
+    const input = "eat out every 3rd saturday";
+    const result = tokenizeInput(input);
+    expect(result).toMatchObject({
+      name: "eat out",
+      schedule: {
+        interval: Interval.weekly,
+        variance: [6],
+        regularity: 3,
+      },
+    });
+  });
+
+  test("every other year", () => {
+    const input = "refinish the deck every other year";
+    const result = tokenizeInput(input);
+    expect(result).toMatchObject({
+      name: "refinish the deck",
+      schedule: {
+        interval: Interval.yearly,
+        variance: [0],
+        regularity: 2,
+      },
+    });
+  });
+
+  test("twice a year", () => {
+    const input = "watch conference twice a year";
+    const result = tokenizeInput(input);
+    expect(result).toMatchObject({
+      name: "watch conference",
+      schedule: {
+        interval: Interval.yearly,
+        variance: [0, 6],
+        regularity: 1,
+      },
+    });
+  });
+});
 
 // change car oil every quarter
 // every quarter

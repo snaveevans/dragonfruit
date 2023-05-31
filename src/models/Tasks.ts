@@ -8,9 +8,13 @@ export interface Task {
 
 const modifiers = {
   other: 2,
+  second: 2,
   "2nd": 2,
+  third: 3,
   "3rd": 3,
+  fourth: 4,
   "4th": 4,
+  fifth: 5,
   "5th": 5,
 };
 
@@ -44,6 +48,8 @@ const intervalIdentifiers = {
 
 const DAILY_MAX = 23;
 const WEEKLY_MAX = 6;
+const MONTHLY_MAX = 27;
+const YEARLY_MAX = 11;
 
 function ensureVarianceRange(variance: number, max: number) {
   if (variance > max) {
@@ -109,6 +115,10 @@ function getVariance(
         mapIntervalWordToNumber(word, Interval.weekly)
       );
       return buildVariances(mappedWords, intervalOccurences, WEEKLY_MAX);
+    case Interval.monthly:
+      return buildVariances(words, intervalOccurences, MONTHLY_MAX);
+    case Interval.yearly:
+      return buildVariances(words, intervalOccurences, YEARLY_MAX);
     default:
       return [];
   }
@@ -118,24 +128,16 @@ function getIntervalIds(
   words: string[],
   intervalOccurences = 1
 ): [Interval, number[]] | undefined {
-  const foundDailyIds = intervalIdentifiers[Interval.daily].filter((dailyId) =>
-    words.find((word) => word === dailyId)
-  );
-  if (foundDailyIds.length) {
-    return [
-      Interval.daily,
-      getVariance(Interval.daily, words, intervalOccurences),
-    ];
-  }
+  const intervals = Object.keys(Interval) as Interval[];
 
-  const foundWeeklyIds = intervalIdentifiers[Interval.weekly].filter(
-    (dailyId) => words.find((word) => word === dailyId)
-  );
-  if (foundWeeklyIds.length) {
-    return [
-      Interval.weekly,
-      getVariance(Interval.weekly, words, intervalOccurences),
-    ];
+  for (const interval of intervals) {
+    const foundIds = intervalIdentifiers[interval].filter((id) =>
+      words.find((word) => word === id)
+    );
+
+    if (foundIds.length) {
+      return [interval, getVariance(interval, words, intervalOccurences)];
+    }
   }
 }
 
@@ -147,7 +149,7 @@ const pivots: {
     const modifier =
       pullNumbers(words.map((w) => mapWordToNumber(w, modifiers))).at(0) ?? 1;
     const allModifiers = Object.keys(modifiers);
-    const cleaned = words.filter(w => !allModifiers.includes(w))
+    const cleaned = words.filter((w) => !allModifiers.includes(w));
     const result = getIntervalIds(cleaned);
     if (!result) {
       return;
