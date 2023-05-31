@@ -35,6 +35,19 @@ describe("tokenizeInput", () => {
       },
     });
   });
+
+  test("twice a day", () => {
+    const input = "pray twice a day";
+    const result = tokenizeInput(input);
+    expect(result).toMatchObject({
+      name: "pray",
+      schedule: {
+        interval: Interval.daily,
+        variance: [2],
+        regularity: 1,
+      },
+    });
+  });
 });
 
 // brush teeth every day
@@ -52,6 +65,12 @@ describe("tokenizeInput", () => {
 // pray twice a day 
 // bi-daily (2 times a day)
   // interval: daily
+  // variance: [2]
+  // regularity: 1
+
+// take out trash every monday
+// every monday
+  // interval: weekly
   // variance: [2]
   // regularity: 1
 
@@ -78,12 +97,6 @@ describe("tokenizeInput", () => {
   // interval: weekly
   // variance: [6]
   // regularity: 2
-
-// take out trash every monday
-// every monday
-  // interval: weekly
-  // variance: [2]
-  // regularity: 1
 
 // change furnace filter at the first of every month
 // first of every month

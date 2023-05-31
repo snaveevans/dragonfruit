@@ -35,18 +35,19 @@ const intervalIdentifiers = {
 };
 
 function getIntervalIds(
-  strippedInput: string
+  strippedInput: string,
+  varianceModifier?: number
 ): [Interval, number[]] | undefined {
   const foundDailyIds = intervalIdentifiers[Interval.daily].filter((dailyId) =>
     strippedInput.includes(dailyId)
   );
   if (foundDailyIds.length) {
-    return [Interval.daily, [1]];
+    return [Interval.daily, [1 * (varianceModifier || 1)]];
   }
 }
 
 const pivots: {
-  [key: string]: (input: string) => Schedule | undefined | void;
+  [key: string]: (strippedInput: string) => Schedule | undefined | void;
 } = {
   every: (input: string) => {
     const result = getIntervalIds(input);
@@ -62,7 +63,19 @@ const pivots: {
       regularity: hasOtherModifier ? 2 : 1,
     };
   },
-  twice: () => {},
+  twice: (strippedInput: string) => {
+    const result = getIntervalIds(strippedInput, 2);
+    if (!result) {
+      return;
+    }
+    const [interval, variance] = result;
+    return {
+      id: "test",
+      interval,
+      variance,
+      regularity: 1,
+    };
+  },
   "at the": () => {},
 };
 
